@@ -1,5 +1,6 @@
 let str = 'hello,';
 
-str += ' webpack';
+str += ' Webpack';
+str += ' and TypeScript';
 
 console.log(`${str}!!`);
