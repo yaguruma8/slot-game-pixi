@@ -1,5 +1,6 @@
 const path = require('path');
 
+const ESLintPlugin = require('eslint-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: { app: './src/index.ts' },
@@ -12,8 +13,8 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist'),
         open: 'google chrome',
         watchOptions: {
-            ignored: /node_modules/
-        }
+            ignored: /node_modules/,
+        },
     },
     module: {
         rules: [
@@ -27,4 +28,12 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+    plugins: [
+        new ESLintPlugin({
+            extensions: ['tsx', 'ts', 'js'],
+            exclude: 'node_modules',
+            formatter: 'stylish',
+            fix: true,
+        }),
+    ],
 };
