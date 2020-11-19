@@ -8,6 +8,13 @@ module.exports = {
         filename: '[name].bundle.js',
     },
     devtool: 'cheap-module-source-map',
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        open: 'google chrome',
+        watchOptions: {
+            ignored: /node_modules/
+        }
+    },
     module: {
         rules: [
             {
