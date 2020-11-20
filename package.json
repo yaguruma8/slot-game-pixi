@@ -6,9 +6,9 @@
   "scripts": {
     "cleanup": "rimraf ./dist",
     "prettier": "prettier --write src/**/*",
-    "tsnode": "ts-node-dev --respawn",
-    "dev": "npm run cleanup && npm run prettier && npx webpack",
-    "dev:server": "webpack serve"
+    "dev": "npm run cleanup && npm run prettier && npx webpack && npx webpack serve",
+    "dev:server": "webpack serve",
+    "tsnode": "ts-node-dev --respawn"
   },
   "repository": {
     "type": "git",
