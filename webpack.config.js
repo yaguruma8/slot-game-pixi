@@ -39,7 +39,8 @@ module.exports = {
         }),
         new HtmlPlugin({
             template: './src/index.html',
-            inject: 'body'
-        })
+            inject: 'head',
+            scriptLoading: 'defer',
+        }),
     ],
 };
