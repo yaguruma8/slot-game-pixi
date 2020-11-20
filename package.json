@@ -1,10 +1,14 @@
 {
   "name": "typescript-env",
   "version": "1.0.0",
-  "description": "webpack+TypeScript+ESLint",
+  "description": "webpack+TypeScript+ESLint+Prettier",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cleanup": "rimraf ./dist",
+    "prettier": "prettier --write src/**/*",
+    "tsnode": "ts-node-dev --respawn",
+    "dev": "npm run cleanup && npm run prettier && npx webpack",
+    "dev:server": "webpack serve"
   },
   "repository": {
     "type": "git",
@@ -23,8 +27,12 @@
     "eslint": "^7.13.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-webpack-plugin": "^2.3.0",
+    "html-webpack-plugin": "^4.5.0",
     "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
     "ts-loader": "^8.0.11",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0",
     "typescript": "^4.0.5",
     "webpack": "^5.6.0",
     "webpack-cli": "^4.2.0",
