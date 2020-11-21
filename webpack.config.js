@@ -29,12 +29,13 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
     plugins: [
         new ESLintPlugin({
             extensions: ['tsx', 'ts', 'js'],
             exclude: 'node_modules',
-            formatter: 'stylish',
+            formatter: 'table',
             fix: true,
         }),
         new HtmlPlugin({
