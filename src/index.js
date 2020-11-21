@@ -1,5 +1,10 @@
 import * as PIXI from 'pixi.js';
 
+import './assets/animalface_duck.png';
+import './assets/animalface_kirin.png';
+import './assets/animalface_tanuki.png';
+import './assets/animalface_usagi.png';
+
 const app = new PIXI.Application({ backgroundColor: 0x1099bb });
 document.body.appendChild(app.view);
 
