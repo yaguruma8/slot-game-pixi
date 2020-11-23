@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "cleanup": "rimraf ./dist",
-    "prettier": "prettier --write src/**/*",
+    "prettier": "prettier --write src/**/*.js",
     "dev": "npm run cleanup && npm run prettier && npx webpack && npx webpack serve",
     "dev:server": "webpack serve",
     "tsnode": "ts-node-dev --respawn"
