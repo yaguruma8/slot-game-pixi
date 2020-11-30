@@ -7,18 +7,14 @@ import './assets/tanuki.png';
 import './assets/usagi.png';
 
 export default class SlotGame {
-    // 読み取り専用
     static readonly width: number = 800;
-    static readonly height: number = 400;
+    static readonly height: number = 640;
     static readonly resources: { name: string; url: string }[] = [
         { name: 'duck', url: './assets/duck.png' },
         { name: 'kirin', url: './assets/kirin.png' },
         { name: 'tanuki', url: './assets/tanuki.png' },
         { name: 'usagi', url: './assets/usagi.png' },
     ];
-
-    #backgroundColor = 0x1099bb;
-    #resolution: number = window.devicePixelRatio || 1;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     #onReady: () => void = () => {};
@@ -35,8 +31,8 @@ export default class SlotGame {
         this.#app = new PIXI.Application({
             width: SlotGame.width,
             height: SlotGame.height,
-            backgroundColor: this.#backgroundColor,
-            resolution: this.#resolution,
+            backgroundColor: 0x1099bb,
+            resolution: window.devicePixelRatio || 1,
         });
         // (2) htmlにCanvas要素を追加
         this.#app.view.style.width = `${SlotGame.width}px`;
