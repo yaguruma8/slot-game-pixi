@@ -16,7 +16,10 @@ export default class SlotGame {
             backgroundColor: 0x1099bb,
             width: SlotGame.STAGE_WIDTH,
             height: SlotGame.STAGE_HEIGHT,
+            resolution: window.devicePixelRatio || 1,
         });
+        this.#app.view.style.width = `${SlotGame.STAGE_WIDTH}px`;
+        this.#app.view.style.height = `${SlotGame.STAGE_HEIGHT}px`;
         document.body.appendChild(this.#app.view);
         // this.#ui = new UI();
         this.#app.loader.load(() => {
