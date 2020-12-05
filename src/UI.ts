@@ -2,78 +2,81 @@ import * as PIXI from 'pixi.js';
 import SlotGame from 'SlotGame';
 import Reel from 'Reel';
 
-type ContainerSize = {
+type position = {
     x: number;
     y: number;
     width: number;
     height: number;
 };
 
-type smallContainerSize = Pick<ContainerSize, 'x' | 'y'>;
-
 export default class UI extends PIXI.Container {
+    #uiPos = this.setUIPosParameter();
+    #textStyle = new PIXI.TextStyle(this.setTextStyleOption());
     #reelContainer: PIXI.Container;
     constructor() {
         super();
-        const margin = (SlotGame.height - Reel.SYMBOL_SIZE * 3) / 2;
-        // Reelコンテナ
-        this.#reelContainer = this.createReelContainer({
-            x: Math.round((SlotGame.width - Reel.WIDTH * 5) / 2),
-            y: margin,
+        this.#reelContainer = new PIXI.Container();
+        this.#reelContainer.x = this.#uiPos.body.x;
+        this.#reelContainer.y = this.#uiPos.body.y;
+
+        const coverTop = this.createCoverGraphics(
+            'PIXI SLOT!',
+            this.#uiPos.top
+        );
+        const coverBottom = this.createCoverGraphics(
+            'Push Start',
+            this.#uiPos.bottom
+        );
+        coverBottom.interactive = true;
+        coverBottom.buttonMode = true;
+        coverBottom.addListener('pointerdown', () => {
+            console.log('coverBottom button down.');
         });
-        // 上下の帯
-        const coverTop = this.createTextContainer('PIXI SLOTS!', {
-            x: 0,
-            y: 0,
-            width: SlotGame.width,
-            height: margin,
-        });
-        const coverBottom = this.createTextContainer('Spin the Wheels!', {
-            x: 0,
-            y: SlotGame.height - margin,
-            width: SlotGame.width,
-            height: margin,
-        });
-        // UIコンテナにpush
+
         this.addChild(this.#reelContainer);
         this.addChild(coverTop);
         this.addChild(coverBottom);
-
-        // 下のテキストをボタンにする
-        const button = coverBottom.getChildByName('text');
-        button.interactive = true;
-        button.buttonMode = true;
-        button.addListener('pointerdown', () => {
-            this.startPlay();
-        });
     }
 
-    private createReelContainer(size: smallContainerSize): PIXI.Container {
-        const container = new PIXI.Container();
-        container.x = size.x;
-        container.y = size.y;
-        for (let i = 0; i < 5; i++) {
-            const reel = new Reel();
-            reel.x = i * Reel.WIDTH;
-            container.addChild(reel);
-        }
-        return container;
+    private createCoverGraphics(str: string, pos: position): PIXI.Graphics {
+        const cover = new PIXI.Graphics();
+        cover.beginFill(0, 1);
+        cover.drawRect(pos.x, pos.y, pos.width, pos.height);
+        cover.endFill();
+        const strContainer = new PIXI.Text(str, this.#textStyle);
+        strContainer.x = Math.round((pos.width - strContainer.width) / 2);
+        strContainer.y =
+            pos.y + Math.round((pos.height - strContainer.height) / 2);
+        cover.addChild(strContainer);
+        return cover;
     }
 
-    private createTextContainer(
-        text: string,
-        size: ContainerSize
-    ): PIXI.Container {
-        const container = new PIXI.Container();
-        container.x = size.x;
-        container.y = size.y;
-        const backgroundGraphic = new PIXI.Graphics();
-        backgroundGraphic.beginFill(0x000000, 1);
-        backgroundGraphic.drawRect(0, 0, size.width, size.height);
-        backgroundGraphic.endFill();
-        container.addChild(backgroundGraphic);
-        // テキスト
-        const style = new PIXI.TextStyle({
+    private setUIPosParameter() {
+        const margin = (SlotGame.STAGE_HEIGHT - Reel.SYMBOL_SIZE * 3) / 2;
+        return {
+            top: {
+                x: 0,
+                y: 0,
+                width: SlotGame.STAGE_WIDTH,
+                height: margin,
+            },
+            body: {
+                x: Math.round((SlotGame.STAGE_WIDTH - Reel.REEL_WIDTH * 5) / 2),
+                y: margin,
+                width: Reel.REEL_WIDTH * 5,
+                height: Reel.SYMBOL_SIZE * 3,
+            },
+            bottom: {
+                x: 0,
+                y: SlotGame.STAGE_HEIGHT - margin,
+                width: SlotGame.STAGE_WIDTH,
+                height: margin,
+            },
+        };
+    }
+
+    private setTextStyleOption() {
+        return {
             fontFamily: 'Arial',
             fontSize: 36,
             fontStyle: 'italic',
@@ -88,24 +91,6 @@ export default class UI extends PIXI.Container {
             dropShadowDistance: 6,
             wordWrap: true,
             wordWrapWidth: 440,
-        });
-        const textContainer = new PIXI.Text(text, style);
-        textContainer.x = Math.round((size.width - textContainer.width) / 2);
-        textContainer.y = Math.round((size.height - textContainer.height) / 2);
-        textContainer.name = 'text';
-        container.addChild(textContainer);
-        return container;
-    }
-
-    private startPlay(): void {
-        console.log('button push!');
-    }
-    update(): void {
-        console.log('UI class: update method');
-        const reels = this.#reelContainer.children as Reel[];
-        for (const reel of reels) {
-            if (!reel.update) continue;
-            reel.update();
-        }
+        };
     }
 }

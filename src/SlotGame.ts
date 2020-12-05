@@ -7,65 +7,25 @@ import './assets/tanuki.png';
 import './assets/usagi.png';
 
 export default class SlotGame {
-    static readonly width: number = 800;
-    static readonly height: number = 640;
-    static readonly resources: { name: string; url: string }[] = [
-        { name: 'duck', url: './assets/duck.png' },
-        { name: 'kirin', url: './assets/kirin.png' },
-        { name: 'tanuki', url: './assets/tanuki.png' },
-        { name: 'usagi', url: './assets/usagi.png' },
-    ];
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    #onReady: () => void = () => {};
-
-    #app!: PIXI.Application;
-    #ui!: UI;
-
+    static readonly STAGE_WIDTH = 800;
+    static readonly STAGE_HEIGHT = 640;
+    #app: PIXI.Application;
+    #ui!: PIXI.Container;
     constructor() {
-        // ※document.body読み込み前ならエラーを投げる
-        if (!document.body) {
-            throw new Error('window is not ready.');
-        }
-        // (1) PIXI.Applicationインスタンスを作成
         this.#app = new PIXI.Application({
-            width: SlotGame.width,
-            height: SlotGame.height,
             backgroundColor: 0x1099bb,
-            resolution: window.devicePixelRatio || 1,
+            width: SlotGame.STAGE_WIDTH,
+            height: SlotGame.STAGE_HEIGHT,
         });
-        // (2) htmlにCanvas要素を追加
-        this.#app.view.style.width = `${SlotGame.width}px`;
-        this.#app.view.style.height = `${SlotGame.height}px`;
         document.body.appendChild(this.#app.view);
-        this.init();
-    }
-
-    private init(): void {
-        // (3) リソースの読み込み
-        for (const resource of SlotGame.resources) {
-            this.#app.loader.add(resource.name, resource.url);
-        }
+        // this.#ui = new UI();
         this.#app.loader.load(() => {
-            // (4) 読み込みが完了したらUI構築
             this.#ui = new UI();
-            // (5) ui構築終了後、run
-            this.#onReady();
+            this.#app.stage.addChild(this.#ui);
         });
+        // this.#app.stage.addChild(this.#ui);
     }
-    run(): void {
-        // ※ UI構築が終わってなければinitの方でrunを再度走らせる
-        if (!this.#ui) {
-            this.#onReady = () => this.run();
-            return;
-        }
-        // (6) 構築済みのUIをstageにpush
-        this.#app.stage.addChild(this.#ui);
-        // (7) app start
-        this.#app.ticker.add(() => {
-            this.#ui.update();
-        });
-    }
+    // start(): void {}
 }
 
 /*
