@@ -16,7 +16,7 @@ export default class SlotGame {
         './assets/usagi.png',
     ];
     #app: PIXI.Application;
-    #ui!: PIXI.Container;
+    #ui!: UI;
     constructor() {
         this.#app = new PIXI.Application({
             backgroundColor: 0x1099bb,
@@ -32,18 +32,18 @@ export default class SlotGame {
         for (const resource of SlotGame.resources) {
             this.#app.loader.add(resource);
         }
-
-        // this.#ui = new UI();
+        // リソース読み込みが完了したらui構築
         this.#app.loader.load(() => {
             this.#ui = new UI();
-            this.#app.stage.addChild(this.#ui);
             this.start();
         });
     }
     start(): void {
         if (!this.#ui) return;
+        this.#app.stage.addChild(this.#ui);
         this.#app.ticker.add(() => {
-            console.log('slotgame start method');
+            // console.log('slotgame start method');
+            this.#ui.update();
         });
     }
 }

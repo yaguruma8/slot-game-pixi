@@ -36,6 +36,12 @@ export default class UI extends PIXI.Container {
         this.addChild(coverBottom);
     }
 
+    update(): void {
+        for (const reel of this.#reelContainer.children as Reel[]) {
+            reel.update();
+        }
+    }
+
     private createCoverGraphics(str: string, pos: position): PIXI.Graphics {
         const cover = new PIXI.Graphics();
         cover.beginFill(0, 1);

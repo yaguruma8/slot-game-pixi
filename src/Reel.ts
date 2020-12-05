@@ -21,6 +21,10 @@ export default class Reel extends PIXI.Container {
         }
     }
 
+    update(): void {
+        console.log('reel update');
+    }
+
     private buildSymbol(): PIXI.Sprite {
         const symbol = new PIXI.Sprite(this.getRandomTexture());
         // テクスチャのスケールをシンボルに合わせる
