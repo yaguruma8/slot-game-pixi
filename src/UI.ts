@@ -15,9 +15,7 @@ export default class UI extends PIXI.Container {
     #reelContainer: PIXI.Container;
     constructor() {
         super();
-        this.#reelContainer = new PIXI.Container();
-        this.#reelContainer.x = this.#uiPos.body.x;
-        this.#reelContainer.y = this.#uiPos.body.y;
+        this.#reelContainer = this.buildReelContainer(this.#uiPos.body);
 
         const coverTop = this.createCoverGraphics(
             'PIXI SLOT!',
@@ -49,6 +47,20 @@ export default class UI extends PIXI.Container {
             pos.y + Math.round((pos.height - strContainer.height) / 2);
         cover.addChild(strContainer);
         return cover;
+    }
+
+    private buildReelContainer(pos: position): PIXI.Container {
+        const reelContainer = new PIXI.Container();
+        reelContainer.x = pos.x;
+        reelContainer.y = pos.y;
+        const reelNum = 5;
+        for (let i = 0; i < reelNum; i++) {
+            const reel = new Reel();
+            reel.x = i * Reel.REEL_WIDTH;
+            reelContainer.addChild(reel);
+        }
+
+        return reelContainer;
     }
 
     private setUIPosParameter() {

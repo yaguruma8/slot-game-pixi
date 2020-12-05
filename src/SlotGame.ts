@@ -37,10 +37,15 @@ export default class SlotGame {
         this.#app.loader.load(() => {
             this.#ui = new UI();
             this.#app.stage.addChild(this.#ui);
+            this.start();
         });
-        // this.#app.stage.addChild(this.#ui);
     }
-    // start(): void {}
+    start(): void {
+        if (!this.#ui) return;
+        this.#app.ticker.add(() => {
+            console.log('slotgame start method');
+        });
+    }
 }
 
 /*
