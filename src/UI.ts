@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import SlotGame from 'SlotGame';
 import Reel from 'Reel';
+import Tween from 'Tween';
 
 type position = {
     x: number;
@@ -13,6 +14,8 @@ export default class UI extends PIXI.Container {
     #uiPos = this.setUIPosParameter();
     #textStyle = new PIXI.TextStyle(this.setTextStyleOption());
     #reelContainer: PIXI.Container;
+
+    running = false;
     constructor() {
         super();
         this.#reelContainer = this.buildReelContainer(this.#uiPos.body);
@@ -29,17 +32,45 @@ export default class UI extends PIXI.Container {
         coverBottom.buttonMode = true;
         coverBottom.addListener('pointerdown', () => {
             console.log('coverBottom button down.');
+            this.startPlay();
         });
 
         this.addChild(this.#reelContainer);
         this.addChild(coverTop);
         this.addChild(coverBottom);
     }
+    startPlay(): void {
+        if (this.running) return;
+
+        this.running = true;
+        const reels = this.#reelContainer.children;
+        for (let i = 0; i < reels.length; i++) {
+            const reel = this.#reelContainer.children[i] as Reel;
+            const extra = Math.floor(Math.random() * 5);
+            const target = reel.pos + 10 + i * 5 + extra;
+            const time = 2500 + i * 600 + extra * 600;
+            const tween = new Tween({
+                object: reel,
+                property: 'pos',
+                target: target,
+                time: time,
+                easing: Tween.backout(0.5),
+                change: null,
+                complete: i === reels.length - 1 ? this.reelsComplete() : null,
+            });
+            Tween.tweening.push(tween);
+        }
+    }
 
     update(): void {
         for (const reel of this.#reelContainer.children as Reel[]) {
             reel.update();
         }
+        Tween.update();
+    }
+
+    reelsComplete(): () => void {
+        return () => (this.running = false);
     }
 
     private createCoverGraphics(str: string, pos: position): PIXI.Graphics {
