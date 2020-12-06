@@ -22,28 +22,32 @@ export default class Reel extends PIXI.Container {
     update(): void {
         this.prevPos = this.pos;
         for (let i = 0; i < this.children.length; i++) {
-            const symbol = this.children[i] as Reel;
+            const symbol = this.children[i] as PIXI.Sprite;
             const prevY = symbol.y;
             symbol.y =
                 ((this.pos + i) % this.children.length) * Reel.SYMBOL_SIZE -
                 Reel.SYMBOL_SIZE;
             if (symbol.y < 0 && prevY > Reel.SYMBOL_SIZE) {
-                const newSymbol = this.buildSymbol();
-                newSymbol.y = symbol.y;
-                this.children.splice(i, 1, newSymbol);
+                symbol.texture = this.getRandomTexture();
+                symbol.scale.x = symbol.scale.y = this.setSymbolScale(symbol);
+                symbol.x = Math.round((Reel.SYMBOL_SIZE - symbol.width) / 2);
             }
         }
     }
 
     private buildSymbol(): PIXI.Sprite {
         const symbol = new PIXI.Sprite(this.getRandomTexture());
-        // テクスチャのスケールをシンボルに合わせる
-        symbol.scale.x = symbol.scale.y = Math.min(
-            Reel.SYMBOL_SIZE / symbol.width,
-            Reel.SYMBOL_SIZE / symbol.height
-        );
+        symbol.scale.x = symbol.scale.y = this.setSymbolScale(symbol);
         symbol.x = Math.round((Reel.SYMBOL_SIZE - symbol.width) / 2);
         return symbol;
+    }
+
+    private setSymbolScale(symbol: PIXI.Sprite): number {
+        const scale = symbol.scale.x;
+        return Math.min(
+            Reel.SYMBOL_SIZE / (symbol.width / scale),
+            Reel.SYMBOL_SIZE / (symbol.height / scale)
+        );
     }
 
     private getRandomTexture(): PIXI.Texture {
