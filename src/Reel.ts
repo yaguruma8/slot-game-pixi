@@ -53,7 +53,7 @@ export default class Reel extends PIXI.Container {
     private getRandomTexture(): PIXI.Texture {
         if (Reel.slotTextures.length === 0) {
             for (const resource of SlotGame.resources) {
-                Reel.slotTextures.push(PIXI.Texture.from(resource));
+                Reel.slotTextures.push(PIXI.Texture.from(resource.name));
             }
         }
         return Reel.slotTextures[

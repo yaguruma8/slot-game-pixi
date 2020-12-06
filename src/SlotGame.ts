@@ -10,10 +10,10 @@ export default class SlotGame {
     static readonly STAGE_WIDTH = 800;
     static readonly STAGE_HEIGHT = 640;
     static readonly resources = [
-        './assets/duck.png',
-        './assets/kirin.png',
-        './assets/tanuki.png',
-        './assets/usagi.png',
+        { name: 'duck', url: './assets/duck.png' },
+        { name: 'kirin', url: './assets/kirin.png' },
+        { name: 'tanuki', url: './assets/tanuki.png' },
+        { name: 'usagi', url: './assets/usagi.png' },
     ];
     #app: PIXI.Application;
     #ui!: UI;
@@ -30,7 +30,7 @@ export default class SlotGame {
         document.body.appendChild(this.#app.view);
         // リソース(image)の読み込み
         for (const resource of SlotGame.resources) {
-            this.#app.loader.add(resource);
+            this.#app.loader.add(resource.name, resource.url);
         }
         // リソース読み込みが完了したらui構築
         this.#app.loader.load(() => {
