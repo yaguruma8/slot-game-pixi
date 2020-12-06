@@ -40,18 +40,10 @@ export default class SlotGame {
     }
     start(): void {
         if (!this.#ui) return;
+        // ui構築完了後にステージに追加してメインループstart
         this.#app.stage.addChild(this.#ui);
         this.#app.ticker.add(() => {
-            // console.log('slotgame start method');
             this.#ui.update();
         });
     }
 }
-
-/*
-PIXI.Application
-DOMにapp追加
-リソースをadd
-リソースをaddし終わったらUI構築
-初期化完了通知
-*/
