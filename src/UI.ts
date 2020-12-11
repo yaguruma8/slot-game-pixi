@@ -70,7 +70,20 @@ export default class UI extends PIXI.Container {
     }
 
     reelsComplete(): () => void {
-        return () => (this.running = false);
+        return () => {
+            this.running = false;
+            // todo: スロットが回り終えた時のsymbolの位置関係を調べる
+            // 中央の
+            // スロットがそろってるかどうかのチェックを実装したい
+            console.log('reelsComplete');
+            for (const reel of this.#reelContainer.children as Reel[]) {
+                // posが小数点数になる時があるので四捨五入で整数に調整
+                const p = Math.round(reel.pos);
+                // p=0->2 p=1->1 p=2->0 p=3->3
+                const symbol = reel.children[(6 - (p % 4)) % 4] as PIXI.Sprite;
+                console.log(symbol.texture.textureCacheIds[0]);
+            }
+        };
     }
 
     private createCoverGraphics(str: string, pos: position): PIXI.Graphics {
@@ -94,6 +107,7 @@ export default class UI extends PIXI.Container {
         for (let i = 0; i < reelNum; i++) {
             const reel = new Reel();
             reel.x = i * Reel.REEL_WIDTH;
+            reel.name = `reel${i}`;
             reelContainer.addChild(reel);
         }
 
